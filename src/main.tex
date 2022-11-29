@@ -12,7 +12,7 @@
 \renewcommand\familydefault{\sfdefault} 
 \everymath={\sf}
 \usepackage{fontspec}
-
+\usepackage{amsmath,amssymb,amsfonts}
 \usepackage{subcaption}
 
 \hypersetup{
@@ -52,8 +52,8 @@
 \newcommand{\mypause}{\ifpause \pause \fi}
 
 %Information to be included in the title page:
-\title{Autonomous Drone Landing with Fiducial Markers\\and a Gimbal-Mounted Camera for Active Tracking}
-\author{Joshua Springer}
+\title{Evaluation of Orientation Ambiguity\\and Detection Rate in April Tag and WhyCode}
+\author{Joshua Springer, Marcel Kyas}
 \institute{Reykjavik University\\Department of Computer Science}
 
 \date{\specialdate\today}
@@ -62,85 +62,232 @@
 
 \maketitle
 
+\nologo
+
 \begin{frame}{Fiducial Markers}
 	\vspace*{\fill}
 	\begin{figure}[]
 	    \centering
-	    \begin{subfigure}[b]{0.2\linewidth}
+	    \begin{subfigure}[b]{0.23\linewidth}
 		\includegraphics[width=\textwidth]{./images/tagCustom48h12_00002_00001_00000}
-		\caption{April Tag 48h12}
+		    \caption{April Tag 48h12~\cite{apriltag3_paper}}
 		\label{figure:apriltag48h12}
 	    \end{subfigure}
-		\hspace{0.05\linewidth}
-	    \begin{subfigure}[b]{0.2\linewidth}
+		\hspace{0.01\linewidth}
+	    \begin{subfigure}[b]{0.23\linewidth}
 		\includegraphics[width=\textwidth]{./images/tagCustom24h10_00002_00001_00000}
-		\caption{April Tag 24h10}
+		    \caption{April Tag 24h10~\cite{fiducial_precursor_evaluation}}
 		\label{figure:apriltag24h10}
 	    \end{subfigure}
-		\hspace{0.05\linewidth}
-	    \begin{subfigure}[b]{0.2\linewidth}
+		\hspace{0.01\linewidth}
+	    \begin{subfigure}[b]{0.23\linewidth}
 		\includegraphics[width=\textwidth]{./images/whycode_20_8}
-		\caption{WhyCode (Orig)}
+		    \caption{WhyCode (Orig)\cite{whycode_paper}}
 		\label{figure:whycode_single}
 	    \end{subfigure}
-		\hspace{0.05\linewidth}
-	    \begin{subfigure}[b]{0.2\linewidth}
+		\hspace{0.01\linewidth}
+	    \begin{subfigure}[b]{0.23\linewidth}
 		\includegraphics[width=\textwidth]{./images/whycode_multi}
-		\caption{WhyCode Multi}
+		    \caption{WhyCode Multi~\cite{fiducial_precursor_evaluation}}
 		\label{figure:whycode_bundle}
 	    \end{subfigure}
 	    \label{figure:marker_setup}
 	\end{figure}
+	\mypause
+%	\vspace{1cm}
+	\begin{itemize}
+		\item Marker \emph{position} $\rightarrow$ accurate
+		\item Marker \emph{orientation} $\rightarrow$ ambiguous
+		\item Application: autonomous precision drone landing
+	\end{itemize}
 	\vspace*{\fill}
 \end{frame}
 
-\begin{frame}{The Downward-facing Camera Axiom}
+\begin{frame}{WhyCode (Orig)}
+	\begin{columns}
+	\begin{column}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./images/whycode_orig_both_solutions_cropped.png}
+	\end{column}
+	\begin{column}{0.6\textwidth}
+	\begin{itemize}
+		\item Position $\rightarrow$ camera intrinsics, marker size (known a priori)\mypause
+		\item Orientation $\rightarrow$ two candidates (yellow/green ellipses)
+		\begin{itemize}
+			\item Which one fits better?
+			\item Minimize variance of intersection length of sampling circle with each tooth
+		\end{itemize}
+	\end{itemize}
+	\end{column}
+	\end{columns}
 \end{frame}
 
-\begin{frame}{Orientation Ambiguity}
+\begin{frame}{WhyCode ``Ellipse''}
+	\begin{columns}
+	\begin{column}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./images/whycode_ellipse_both_solutions_cropped.png}
+	\end{column}
+	\begin{column}{0.6\textwidth}
+	\begin{itemize}
+		\item Changes the method for choosing the orientation candidate
+		\begin{itemize}
+			\item Original sampling predicts tooth transition locations
+			\item Sample again along radii through tooth centers
+			\item Try to center radial sampling lines on white-to-black transitions
+		\end{itemize}
+	\end{itemize}
+	\end{column}
+	\end{columns}
 \end{frame}
 
-\begin{frame}{Testing Platform: DJI Spark}
-	DJI Mobile SDK
+\begin{frame}{WhyCode ``Multi''}
+	\begin{columns}
+	\begin{column}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./images/cropped_whycode_3_8_jiri_example.png}
+	\end{column}
+	\begin{column}{0.6\textwidth}
+	\begin{itemize}
+		\item Assumes coplanar marker arrangements
+		\item Samples as in WhyCode Orig
+		\item Uses only marker size, positions and IDs.
+		\item Regresses a plane to the marker positions
+		\item Assigns the plane's orientation to all of the markers
+	\end{itemize}
+	\end{column}
+	\end{columns}
 \end{frame}
 
-\begin{frame}{Testing Platform Limitations/Workarounds}
+\begin{frame}{April Tag 48h12}
+	\begin{columns}
+	\begin{column}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./images/tagCustom48h12_00002_00001_00000.png}
+	\end{column}
+	\begin{column}{0.6\textwidth}
+	\begin{itemize}
+		\item 36 outer ID bits + 12 inner ID bits
+		\item 28 black border bits
+		\item 20 white border bits
+		\item 4 undefined, center bits (for marker embedding)
+		\item 42,211 markers in a single hash table in RAM
+	\end{itemize}
+	\end{column}
+	\end{columns}
 \end{frame}
 
-\begin{frame}{Example Tracking Performance}
+\begin{frame}{April Tag 24h10}
+	\begin{columns}
+	\begin{column}{0.4\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{./images/tagCustom24h10_00002_00001_00000.png}
+	\end{column}
+	\begin{column}{0.6\textwidth}
+	\begin{itemize}
+		\item 24 outer ID bits
+		\item 16 black border bits
+		\item 8 white border bits
+		\item 1 undefined center bit (for marker embedding)
+		\item 18 total markers
+	\end{itemize}
+	\end{column}
+	\end{columns}
 \end{frame}
 
-\begin{frame}{Example Landing Trajectory}
+\begin{frame}{ROS Message Attributes}
+	\begin{itemize}
+		\item For autonomous landing application
+		\item A \textbf{position target} $P$ in the a relative
+			``east, north, up'' (ENU) coordinate frame
+		\item The marker's \textbf{orientation quaternion} $q$
+		\item The \textbf{normalized pixel position} $u_n, v_n \in [-1,1]$
+			of the center of each marker
+		\item The marker's \textbf{orientation components}: yaw, pitch, and roll
+			(where not originally exposed)
+	\end{itemize}
 \end{frame}
 
-\begin{frame}{Example Control Outputs}
+\begin{frame}{Quantifying Orientation Ambiguity}
+	\centering
+	\renewcommand{\arraystretch}{2}
+	\begin{tabular}{ll}
+		\textbf{Linear Discontinuities} & \textbf{Angular Discontinuities}\\
+		$P = \langle p_e, p_n, p_u \rangle$ & $q = \langle q_w, q_x, q_y, q_z \rangle$\\
+		$\frac{p_{x,i+1}}{p_{x,i}} < \theta_l < 0$ & $s_a = \frac{\mathrm{dist} \left( q_i, q_{i+1} \right) }{\Delta t} > \theta_a > 0$\\
+		$\theta_l = -0.8$ & $\theta_a = 1.0 \frac{\mathrm{rad}}{s}$
+	\end{tabular}
+	\begin{itemize}
+		\item Single marker arrangement showing all markers
+		\item All markers fully contained in every frame
+		\item Discontinuity occurs when both conditions are true
+		\item Discontinuity rate: $r_d = \frac{d}{n}$: $d$ is number of discontinuities, $n$ is number of detections
+	\end{itemize}
 \end{frame}
 
-\begin{frame}{Erroneous Control Outputs}
+\begin{frame}{Quantifying Detection Rate}
+	\begin{itemize}
+		\item One static marker per video
+		\item Multiple distances
+		\item Constant camera, framerate, resolution
+		\item Detection rate: $F=\frac{n}{t}$: $n$ is number of detections, $t$ is the length in seconds of each test case
+		\item Raspberry Pi 4 with 2 GB of RAM
+	\end{itemize}
 \end{frame}
 
-\begin{frame}{Erroneous Landing Trajectory}
+\begin{frame}{Example Test Case}
+	\centering
+	\includegraphics[width=0.75\linewidth]{images/orbit-left-right-3_apriltag48h12_position-target}
+%	\includegraphics[width=0.49\linewidth]{images/orbit-left-right-4_apriltag48h12_position-target}
+%	\includegraphics[width=0.95\linewidth]{images/orbit-left-right-4_apriltag48h12_angular-velocity}
 \end{frame}
 
-\begin{frame}{Landing Radii}
+\begin{frame}{Example Test Case with Discontinuities}
+	\centering
+%	\includegraphics[width=0.49\linewidth]{images/orbit-left-right-3_apriltag48h12_position-target}
+	\includegraphics[width=0.75\linewidth]{images/orbit-left-right-4_apriltag48h12_position-target}
+%	\includegraphics[width=0.95\linewidth]{images/orbit-left-right-4_apriltag48h12_angular-velocity}
 \end{frame}
 
-\begin{frame}{Future Work}
+\begin{frame}{Example Test Case - Angular Speed}
+	\centering
+%	\includegraphics[width=0.49\linewidth]{images/orbit-left-right-3_apriltag48h12_position-target}
+%	\includegraphics[width=0.49\linewidth]{images/orbit-left-right-4_apriltag48h12_position-target}
+	\includegraphics[width=0.7\linewidth]{images/orbit-left-right-4_apriltag48h12_angular-velocity}
+\end{frame}
+
+\begin{frame}{Results: Discontinuity Rates}
+    \centering
+    \includegraphics[width=0.6\linewidth]{./images/violin_plot_five_member}
+%    \includegraphics[width=0.49\linewidth]{./images/violin_plot_speed_five_member}
+\end{frame}
+
+\begin{frame}{Results: Detection Rates}
+    \centering
+%    \includegraphics[width=0.49\linewidth]{./images/violin_plot_five_member}
+    \includegraphics[width=0.6\linewidth]{./images/violin_plot_speed_five_member}
 \end{frame}
 
 \begin{frame}{Main Messages}
 	\begin{itemize}
-		\item \emph{Actuated}, gimbal-mounted camera
-			\mypause $\rightarrow$ easier to search for the landing pad.
-		\mypause\item Orientation ambiguity, discontinuities
-			\mypause $\rightarrow$ pose estimation is harder.
-		\mypause\item Autonomous precision landing still possible
-			\mypause but can be improved.
+		\item Fiducial markers: orientation is hard to determine
+		\begin{itemize}
+			\item Orientation ambiguity manifests as sign flips
+			\item Present in all fiducial systems, but at different rates
+		\end{itemize}
+		\item Detection rate
+		\begin{itemize}
+			\item Limited by hardware capabilities
+			\item Limited by software architecture
+			\item Some faster than others
+		\end{itemize}
 	\end{itemize}
 \end{frame}
 
-
-%\begin{frame}{}
-%\end{frame}
+\begin{frame}{References}
+	\setbeamertemplate{bibliography item}[triangle]
+	\bibliographystyle{plain}
+	\bibliography{references}
+\end{frame}
 
 \end{document}
