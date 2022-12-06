@@ -264,7 +264,7 @@
 	\begin{tabular}{ll}
 		\textbf{Linear Discontinuities} & \textbf{Angular Discontinuities}\\
 		$P = \langle p_e, p_n, p_u \rangle$ & $q = \langle q_w, q_x, q_y, q_z \rangle$\\
-		$\frac{p_{x,i+1}}{p_{x,i}} < \theta_l < 0$ & $s_a = \frac{\mathrm{dist} \left( q_i, q_{i+1} \right) }{\Delta t} > \theta_a > 0$\\
+		$\frac{p_{x,i+1}}{p_{x,i}} < \theta_l < 0$ & $s_a = \left| \frac{\mathrm{dist} \left( q_i, q_{i+1} \right) }{\Delta t} \right| > \theta_a > 0$\\
 		$\theta_l = -0.8$ & $\theta_a = 1.0 \frac{\mathrm{rad}}{s}$
 	\end{tabular}
 \end{frame}
