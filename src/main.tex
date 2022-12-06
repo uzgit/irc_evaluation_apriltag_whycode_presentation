@@ -1,5 +1,9 @@
 \documentclass[aspectratio=169]{beamer}
- 
+
+
+\usepackage[backend=biber,bibencoding=utf8,style=verbose-inote,citestyle=authoryear]{biblatex}
+\bibliography{references}
+
 \usepackage[utf8]{inputenc}
 \usepackage{lipsum}
 
@@ -24,6 +28,13 @@
 %    pdfpagemode=FullScreen,
 }
 
+\usepackage{hyperref}
+\hypersetup{
+    colorlinks = false,
+    linkbordercolor = {white}
+}
+
+
 % use settings files
 \input{configuration_files/beamer_theme.tex}
 \input{configuration_files/quotations.tex}
@@ -38,7 +49,8 @@
 \newcommand*{\QEDA}{\hfill\ensuremath{\blacksquare}}
 
 \usepackage{datetime}
-\newdateformat{specialdate}{\twodigit{\THEDAY} \ \monthname[\THEMONTH] \THEYEAR}
+%\newdateformat{specialdate}{\twodigit{\THEDAY} \ \monthname[\THEMONTH] \THEYEAR}
+\newdateformat{specialdate}{\THEDAY \ \monthname[\THEMONTH] \THEYEAR}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \newcommand{\nologo}{\setbeamertemplate{logo}{}}
@@ -56,7 +68,7 @@
 \author{Joshua Springer, Marcel Kyas}
 \institute{Reykjavik University\\Department of Computer Science}
 
-\date{\specialdate\today}
+\date{7 December 2022}
 
 \begin{document}
 
@@ -65,43 +77,72 @@
 \nologo
 
 \begin{frame}{Fiducial Markers}
-	\vspace*{\fill}
-	\begin{figure}[]
-	    \centering
-	    \begin{subfigure}[b]{0.23\linewidth}
-		\includegraphics[width=\textwidth]{./images/tagCustom48h12_00002_00001_00000}
-		    \caption{April Tag 48h12~\cite{apriltag3_paper}}
-		\label{figure:apriltag48h12}
-	    \end{subfigure}
-		\hspace{0.01\linewidth}
-	    \begin{subfigure}[b]{0.23\linewidth}
-		\includegraphics[width=\textwidth]{./images/tagCustom24h10_00002_00001_00000}
-		    \caption{April Tag 24h10~\cite{fiducial_precursor_evaluation}}
-		\label{figure:apriltag24h10}
-	    \end{subfigure}
-		\hspace{0.01\linewidth}
-	    \begin{subfigure}[b]{0.23\linewidth}
-		\includegraphics[width=\textwidth]{./images/whycode_20_8}
-		    \caption{WhyCode (Orig)\cite{whycode_paper}}
-		\label{figure:whycode_single}
-	    \end{subfigure}
-		\hspace{0.01\linewidth}
-	    \begin{subfigure}[b]{0.23\linewidth}
-		\includegraphics[width=\textwidth]{./images/whycode_multi}
-		    \caption{WhyCode Multi~\cite{fiducial_precursor_evaluation}}
-		\label{figure:whycode_bundle}
-	    \end{subfigure}
-	    \label{figure:marker_setup}
-	\end{figure}
-	\mypause
-%	\vspace{1cm}
+	\centering
+	\begin{tabular}{cccc}
+
+		\includegraphics[width=0.20\textwidth]{./images/tagCustom48h12_00002_00001_00000}
+		&
+		\includegraphics[width=0.20\textwidth]{./images/tagCustom24h10_00002_00001_00000}
+		&
+		\includegraphics[width=0.20\textwidth]{./images/whycode_20_8}
+		&
+		\includegraphics[width=0.20\textwidth]{./images/whycode_multi}
+		\\
+		    April Tag 48h12~\footcite{apriltag3_paper}
+		    &
+		    April Tag 24h10%~\footcite{fiducial_precursor_evaluation}
+		    &
+		    WhyCode~\footcite{whycode_paper} (Orig)
+		    &
+		    WhyCode Multi%~\footcite{fiducial_precursor_evaluation}
+		    \\
+		\end{tabular}
 	\begin{itemize}
 		\item Marker \emph{position} $\rightarrow$ accurate
 		\item Marker \emph{orientation} $\rightarrow$ ambiguous
-		\item Application: autonomous precision drone landing
+		\item Application: autonomous drone landing (requiring pose transformation using the orientation)
 	\end{itemize}
 	\vspace*{\fill}
 \end{frame}
+
+%\begin{frame}{Fiducial Markers}
+%	\vspace*{\fill}
+%	\begin{figure}[]
+%	    \centering
+%	    \begin{subfigure}[b]{0.23\linewidth}
+%		\includegraphics[width=\textwidth]{./images/tagCustom48h12_00002_00001_00000}
+%		    \caption{April Tag 48h12~\cite{apriltag3_paper}}
+%		\label{figure:apriltag48h12}
+%	    \end{subfigure}
+%		\hspace{0.01\linewidth}
+%	    \begin{subfigure}[b]{0.23\linewidth}
+%		\includegraphics[width=\textwidth]{./images/tagCustom24h10_00002_00001_00000}
+%		    \caption{April Tag 24h10~\cite{fiducial_precursor_evaluation}}
+%		\label{figure:apriltag24h10}
+%	    \end{subfigure}
+%		\hspace{0.01\linewidth}
+%	    \begin{subfigure}[b]{0.23\linewidth}
+%		\includegraphics[width=\textwidth]{./images/whycode_20_8}
+%		    \caption{WhyCode (Orig)\cite{whycode_paper}}
+%		\label{figure:whycode_single}
+%	    \end{subfigure}
+%		\hspace{0.01\linewidth}
+%	    \begin{subfigure}[b]{0.23\linewidth}
+%		\includegraphics[width=\textwidth]{./images/whycode_multi}
+%		    \caption{WhyCode Multi~\cite{fiducial_precursor_evaluation}}
+%		\label{figure:whycode_bundle}
+%	    \end{subfigure}
+%	    \label{figure:marker_setup}
+%	\end{figure}
+%	\mypause
+%%	\vspace{1cm}
+%	\begin{itemize}
+%		\item Marker \emph{position} $\rightarrow$ accurate
+%		\item Marker \emph{orientation} $\rightarrow$ ambiguous
+%		\item Application: autonomous precision drone landing
+%	\end{itemize}
+%	\vspace*{\fill}
+%\end{frame}
 
 \begin{frame}{WhyCode (Orig)}
 	\begin{columns}
@@ -111,7 +152,7 @@
 	\end{column}
 	\begin{column}{0.6\textwidth}
 	\begin{itemize}
-		\item Position $\rightarrow$ camera intrinsics, marker size (known a priori)\mypause
+		\item Position $\rightarrow$ camera intrinsics, marker size (known)
 		\item Orientation $\rightarrow$ two candidates (yellow/green ellipses)
 		\begin{itemize}
 			\item Which one fits better?
@@ -189,7 +230,7 @@
 		\item 16 black border bits
 		\item 8 white border bits
 		\item 1 undefined center bit (for marker embedding)
-		\item 18 total markers
+		\item 18 total markers (enough for our purposes)
 	\end{itemize}
 	\end{column}
 	\end{columns}
@@ -201,39 +242,33 @@
 		\item A \textbf{position target} $P$ in the a relative
 			``east, north, up'' (ENU) coordinate frame
 		\item The marker's \textbf{orientation quaternion} $q$
-		\item The \textbf{normalized pixel position} $u_n, v_n \in [-1,1]$
-			of the center of each marker
-		\item The marker's \textbf{orientation components}: yaw, pitch, and roll
-			(where not originally exposed)
+%		\item The \textbf{normalized pixel position} $u_n, v_n \in [-1,1]$
+%			of the center of each marker
+%		\item The marker's \textbf{orientation components}: yaw, pitch, and roll
+%			(where not originally exposed)
 	\end{itemize}
 \end{frame}
 
 \begin{frame}{Quantifying Orientation Ambiguity}
 	\centering
-	\renewcommand{\arraystretch}{2}
+	\begin{itemize}
+		\item 34 test cases: orbit left/right, orbit up/down, pan left/right, tilt up/down, etc.\mypause
+		\item Coplanar marker arrangement, same motion for all markers, all markers visible, 30cm side length\mypause
+%		\item All markers fully contained in every frame
+		\item Distances of 1-3 meters\mypause
+		\item Creative Technology Live! Webcam at 480p, 30 fps
+%		\item Discontinuity occurs when both conditions are true
+		\item Discontinuity rate: $r_d = \frac{d}{n}$: $d$ is number of discontinuities, $n$ is number of detections
+	\end{itemize}
+%	\renewcommand{\arraystretch}{2}
 	\begin{tabular}{ll}
 		\textbf{Linear Discontinuities} & \textbf{Angular Discontinuities}\\
 		$P = \langle p_e, p_n, p_u \rangle$ & $q = \langle q_w, q_x, q_y, q_z \rangle$\\
 		$\frac{p_{x,i+1}}{p_{x,i}} < \theta_l < 0$ & $s_a = \frac{\mathrm{dist} \left( q_i, q_{i+1} \right) }{\Delta t} > \theta_a > 0$\\
 		$\theta_l = -0.8$ & $\theta_a = 1.0 \frac{\mathrm{rad}}{s}$
 	\end{tabular}
-	\begin{itemize}
-		\item Single marker arrangement showing all markers
-		\item All markers fully contained in every frame
-		\item Discontinuity occurs when both conditions are true
-		\item Discontinuity rate: $r_d = \frac{d}{n}$: $d$ is number of discontinuities, $n$ is number of detections
-	\end{itemize}
 \end{frame}
 
-\begin{frame}{Quantifying Detection Rate}
-	\begin{itemize}
-		\item One static marker per video
-		\item Multiple distances
-		\item Constant camera, framerate, resolution
-		\item Detection rate: $F=\frac{n}{t}$: $n$ is number of detections, $t$ is the length in seconds of each test case
-		\item Raspberry Pi 4 with 2 GB of RAM
-	\end{itemize}
-\end{frame}
 
 \begin{frame}{Example Test Case}
 	\centering
@@ -256,13 +291,25 @@
 	\includegraphics[width=0.7\linewidth]{images/orbit-left-right-4_apriltag48h12_angular-velocity}
 \end{frame}
 
-\begin{frame}{Results: Discontinuity Rates}
+\begin{frame}{Results: Discontinuity Rates (Lower is Better)}
     \centering
     \includegraphics[width=0.6\linewidth]{./images/violin_plot_five_member}
 %    \includegraphics[width=0.49\linewidth]{./images/violin_plot_speed_five_member}
 \end{frame}
 
-\begin{frame}{Results: Detection Rates}
+\begin{frame}{Quantifying Detection Rate}
+	\begin{itemize}
+		\item 16 test cases per marker
+		\item distances of 0.6-3 meters (motivated by application)
+		\item 8 normal, 8 with 45 degrees deflection
+		\item One static marker per video
+		\item Constant camera, framerate, resolution
+		\item Detection rate: $F=\frac{n}{t}$: $n$ is number of detections, $t$ is the length in seconds of each test case
+		\item Raspberry Pi 4 with 2 GB of RAM
+	\end{itemize}
+\end{frame}
+
+\begin{frame}{Results: Detection Rates (Higher is Better)}
     \centering
 %    \includegraphics[width=0.49\linewidth]{./images/violin_plot_five_member}
     \includegraphics[width=0.6\linewidth]{./images/violin_plot_speed_five_member}
@@ -277,17 +324,20 @@
 		\end{itemize}
 		\item Detection rate
 		\begin{itemize}
-			\item Limited by hardware capabilities
-			\item Limited by software architecture
-			\item Some faster than others
+			\item Influenced by hardware capabilities, software architecture
+		\end{itemize}
+		\item Application to autonomous landing with gimbal:
+		\begin{itemize}
+			\item Most tested systems are worth trying
+			\item April Tag 24h10 is likely to have issues
 		\end{itemize}
 	\end{itemize}
 \end{frame}
 
-\begin{frame}{References}
-	\setbeamertemplate{bibliography item}[triangle]
-	\bibliographystyle{plain}
-	\bibliography{references}
-\end{frame}
+%\begin{frame}{References}
+%	\setbeamertemplate{bibliography item}[triangle]
+%	\bibliographystyle{plain}
+%	\bibliography{references}
+%\end{frame}
 
 \end{document}
